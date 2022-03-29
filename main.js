@@ -140,25 +140,25 @@ function createButtons(id) {
 
 radioAll.addEventListener('click', event => {
     document.querySelectorAll('.box').forEach(order => {
-        order.style.display='flex'
+        order.style.display = 'flex'
     })
 })
 
 radioDone.addEventListener('click', event => {
-    document.querySelectorAll('[is-done=true]').forEach(order =>{
-            order.style.display='flex'
-    }
-        )
+    document.querySelectorAll('[is-done=true]').forEach(order => {
+            order.style.display = 'flex'
+        }
+    )
     document.querySelectorAll('[is-done=false]').forEach(order => {
-        order.style.display= 'none'
+        order.style.display = 'none'
     })
 })
 
 radioTodo.addEventListener('click', event => {
-    document.querySelectorAll('[is-done=false]').forEach(order =>{
-        order.style.display='flex'
+    document.querySelectorAll('[is-done=false]').forEach(order => {
+        order.style.display = 'flex'
     })
-    document.querySelectorAll('[is-done=true]').forEach(order =>{
-        order.style.display= 'none'
+    document.querySelectorAll('[is-done=true]').forEach(order => {
+        order.style.display = 'none'
     })
 })
