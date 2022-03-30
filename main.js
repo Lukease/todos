@@ -43,8 +43,10 @@ function createOrder(text) {
     orderText.innerHTML = text
 
     orderText.addEventListener('click', event => {
-        if (event.target.className === 'box__div') {
-            event.target.style.textDecoration = 'line-through'
+        if (!event.target.classList.contains('strike')) {
+
+            event.target.classList.remove('box__div')
+            event.target.classList.add('strike')
             order.setAttribute('is-done', 'true')
 
             orderListStrike = orderListStrike.concat({
@@ -52,10 +54,8 @@ function createOrder(text) {
                 isDone: true,
                 id: newId
             })
-            console.log(orderListStrike, 'list: done')
 
             orderListTodo = orderListTodo.filter(order => order.id !== newId)
-            console.log(orderListTodo, 'list : todo')
 
             orderList = orderList.map(order => {
                 if (order.id !== newId) {
@@ -68,8 +68,31 @@ function createOrder(text) {
                 }
             })
 
-            console.log(orderList, 'list: all')
+            return
         }
+
+        event.target.classList.add('box__div')
+        event.target.classList.remove('strike')
+        order.setAttribute('is-done', 'false')
+
+        orderListTodo = orderListTodo.concat({
+            text: text,
+            isDone: false,
+            id: newId
+        })
+
+        orderListStrike = orderListStrike.filter(order => order.id !== newId)
+
+        orderList = orderList.map(order => {
+            if (order.id !== newId) {
+                return order
+            }
+
+            return {
+                ...order,
+                isDone: order.isDone
+            }
+        })
     })
 
     const newButtons = createButtons(newId)
@@ -149,7 +172,7 @@ radioDone.addEventListener('click', event => {
             order.style.display = 'flex'
         }
     )
-    document.querySelectorAll('[is-done=false]').forEach(order => {
+    document.querySelectorAll('div.box[is-done=false]').forEach(order => {
         order.style.display = 'none'
     })
 })
