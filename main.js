@@ -1,6 +1,6 @@
 const main = document.querySelector('.main')
 const makeOrder = document.querySelector('.inputText')
-const button = document.querySelector('.button')
+const makeOrderButton = document.querySelector('.button')
 const radioAll = document.querySelector('.filters__box--all')
 const radioDone = document.querySelector('.filters__box--done')
 const radioTodo = document.querySelector('.filters__box--todo')
@@ -9,9 +9,7 @@ let orderList = []
 let orderListStrike = []
 let orderListTodo = []
 
-makeOrder.placeholder = 'order name'
-
-button.addEventListener('click', makeNewOrderBox)
+makeOrderButton.addEventListener('click', makeNewOrderBox)
 
 function makeNewOrderBox(event) {
     if (makeOrder.value === '') {
@@ -121,15 +119,11 @@ function createButtons(id) {
     boxButtons.appendChild(trashButton)
 
     trashButton.addEventListener('click', event => {
-        console.log('delete', id)
         event.target.parentNode.parentNode.parentNode.remove()
 
         orderList = orderList.filter(order => order.id !== id)
-        console.log(orderList, 'list: all')
         orderListTodo = orderListTodo.filter(order => order.id !== id)
-        console.log(orderListTodo, 'list : todo')
         orderListStrike = orderListStrike.filter(order => order.id !== id)
-        console.log(orderListStrike, 'list: done')
     })
 
     const editButton = document.createElement('button')
