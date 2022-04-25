@@ -1,3 +1,5 @@
+import {Order} from './order'
+
 const main = document.querySelector('.main')
 const makeOrder = document.querySelector('.inputText')
 const makeOrderButton = document.querySelector('.button')
@@ -11,59 +13,46 @@ let orderListTodo = []
 
 makeOrderButton.addEventListener('click', makeNewOrderBox)
 
-function makeNewOrderBox(event) {
+function makeNewOrderBox() {
     if (makeOrder.value === '') {
         return
     }
 
     const newOrder = createOrder(makeOrder.value)
+
     main.appendChild(newOrder)
 
     makeOrder.value = ''
-
-    console.log(orderList)
 }
 
 function createOrder(text) {
-    const order = document.createElement('div')
-    const newId = Date.now().toString()
-    order.setAttribute('todo-id', newId)
-    order.setAttribute('is-done', 'false')
-    order.classList.add('box')
-
-    const orderBox = document.createElement('div')
-    orderBox.classList.add('box__text')
-    order.appendChild(orderBox)
-
-    const orderText = document.createElement('p')
-    orderText.classList.add('box__div')
-    orderBox.appendChild(orderText)
-    orderText.innerHTML = text
+    const newOrder = new Order(text)
+    const order = newOrder.render()
+    const newId = newOrder.getId()
+    const orderText = newOrder.getOrderText()
+    const trashButton = newOrder.getTrashButton()
+    const editButton = newOrder.getEditButton()
+    const editInput = newOrder.getEditInput()
 
     orderText.addEventListener('click', event => {
+
         if (!event.target.classList.contains('strike')) {
 
             event.target.classList.remove('box__div')
             event.target.classList.add('strike')
             order.setAttribute('is-done', 'true')
+            newOrder.setIsDone(true)
+            orderListStrike = orderListStrike.concat(newOrder)
+            orderListTodo = orderListTodo.filter(order => order.getId() !== newId)
 
-            orderListStrike = orderListStrike.concat({
-                text: text,
-                isDone: true,
-                id: newId
-            })
+            orderList.forEach(order => {
+                if (order.getId !== newId) {
 
-            orderListTodo = orderListTodo.filter(order => order.id !== newId)
-
-            orderList = orderList.map(order => {
-                if (order.id !== newId) {
                     return order
                 }
 
-                return {
-                    ...order,
-                    isDone: !order.isDone
-                }
+                return !order.getIsDone()
+
             })
 
             return
@@ -72,87 +61,51 @@ function createOrder(text) {
         event.target.classList.add('box__div')
         event.target.classList.remove('strike')
         order.setAttribute('is-done', 'false')
+        newOrder.setIsDone(false)
 
-        orderListTodo = orderListTodo.concat({
-            text: text,
-            isDone: false,
-            id: newId
-        })
+        orderListTodo = orderListTodo.concat(newOrder)
+        orderListStrike = orderListStrike.filter(order => order.getId() !== newId)
 
-        orderListStrike = orderListStrike.filter(order => order.id !== newId)
-
-        orderList = orderList.map(order => {
-            if (order.id !== newId) {
+        orderList.forEach(order => {
+            if (order.getId() !== newId) {
                 return order
             }
 
-            return {
-                ...order,
-                isDone: order.isDone
-            }
+            return order.getIsDone()
+
         })
     })
 
-    const newButtons = createButtons(newId)
-    orderBox.appendChild(newButtons)
-
-    orderList = orderList.concat({
-        text: text,
-        isDone: false,
-        id: newId
-    })
-
-    orderListTodo = orderListTodo.concat({
-        text: text,
-        isDone: false,
-        id: newId
-    })
-
-    return order
-}
-
-function createButtons(id) {
-    const boxButtons = document.createElement('span')
-
-    const trashButton = document.createElement('button')
-    trashButton.classList.add('fa-solid', 'fa-trash')
-    boxButtons.appendChild(trashButton)
+    orderList = orderList.concat(newOrder)
+    orderListTodo = orderListTodo.concat(newOrder)
 
     trashButton.addEventListener('click', event => {
         event.target.parentNode.parentNode.parentNode.remove()
 
-        orderList = orderList.filter(order => order.id !== id)
-        orderListTodo = orderListTodo.filter(order => order.id !== id)
-        orderListStrike = orderListStrike.filter(order => order.id !== id)
+        orderList = orderList.filter(order => order.id !== newId)
+        orderListTodo = orderListTodo.filter(order => order.id !== newId)
+        orderListStrike = orderListStrike.filter(order => order.id !== newId)
     })
-
-    const editButton = document.createElement('button')
-    editButton.classList.add('fa-solid', 'fa-pen')
-    boxButtons.appendChild(editButton)
-    boxButtons.append(trashButton, editButton)
 
     editButton.addEventListener('click', event => {
         event.target.parentNode.parentNode.parentNode.remove()
 
-        orderList = orderList.filter(order => order.id !== id)
-        orderListTodo = orderListTodo.filter(order => order.id !== id)
-        orderListStrike = orderListStrike.filter(order => order.id !== id)
-
-        const editInput = document.createElement('input')
-        editInput.classList.add('box')
+        orderList = orderList.filter(order => order.id !== newId)
+        orderListTodo = orderListTodo.filter(order => order.id !== newId)
+        orderListStrike = orderListStrike.filter(order => order.id !== newId)
 
         main.appendChild(editInput)
 
         editInput.addEventListener('change', event => {
             const editText = editInput.value
             const newOrder = createOrder(editText)
-            main.appendChild(newOrder)
 
+            main.appendChild(newOrder)
             event.target.remove()
         })
     })
 
-    return boxButtons
+    return order
 }
 
 radioAll.addEventListener('click', event => {
