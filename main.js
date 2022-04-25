@@ -6,8 +6,9 @@ const makeOrderButton = document.querySelector('.button')
 const radioAll = document.querySelector('.filters__box--all')
 const radioDone = document.querySelector('.filters__box--done')
 const radioTodo = document.querySelector('.filters__box--todo')
+let todos = []
 
-const makeNewOrderBox = () =>{
+const makeNewOrderBox = () => {
     if (makeOrder.value === '') {
         return
     }
@@ -22,15 +23,11 @@ const makeNewOrderBox = () =>{
 function createOrder(text) {
     const newOrder = new Order(text)
     const order = newOrder.render()
-    const newId = newOrder.getId()
     const orderText = newOrder.getOrderText()
     const trashButton = newOrder.getTrashButton()
     const editButton = newOrder.getEditButton()
     const editInput = newOrder.getEditInput()
-
-    order.setAttribute('is-done', newOrder.getIsDone())
-    order.setAttribute('todo-id', newId)
-    order.setAttribute('text', text)
+    todos = todos.concat(newOrder)
 
     orderText.addEventListener('click', () => {
 
@@ -38,26 +35,25 @@ function createOrder(text) {
 
             orderText.classList.remove('box__div')
             orderText.classList.add('strike')
-            order.setAttribute('is-done', 'true')
-            newOrder.setIsDone(true)
+
+            newOrder.setIsDone('true')
 
             return
         }
 
         orderText.classList.add('box__div')
         orderText.classList.remove('strike')
-        order.setAttribute('is-done', 'false')
-        newOrder.setIsDone(false)
+
+        newOrder.setIsDone('false')
 
     })
 
     trashButton.addEventListener('click', () => {
-        trashButton.parentNode.parentNode.parentNode.remove()
-
+        order.remove()
     })
 
     editButton.addEventListener('click', () => {
-        editButton.parentNode.parentNode.parentNode.remove()
+        order.remove()
 
         main.appendChild(editInput)
 
@@ -70,32 +66,30 @@ function createOrder(text) {
         })
     })
 
+    const filteredOrder = (done) => {
+        todos
+            .filter(todo => todo.getIsDone() === done)
+            .map(todo => todo.getOrder())
+            .forEach(todo => {
+                todo.style.display = 'flex'
+            })
+    }
+
+    radioTodo.addEventListener('click', () => {
+        order.style.display='none'
+        filteredOrder('false')
+    })
+
+    radioAll.addEventListener('click', () => {
+        order.style.display = 'flex'
+    })
+
+    radioDone.addEventListener('click', () => {
+        order.style.display='none'
+        filteredOrder('true')
+    })
+
     return order
 }
 
 makeOrderButton.addEventListener('click', makeNewOrderBox)
-
-radioAll.addEventListener('click', () => {
-    document.querySelectorAll('.box').forEach(order => {
-        order.style.display = 'flex'
-    })
-})
-
-radioDone.addEventListener('click', () => {
-    document.querySelectorAll('[is-done=true]').forEach(order => {
-            order.style.display = 'flex'
-        }
-    )
-    document.querySelectorAll('div.box[is-done=false]').forEach(order => {
-        order.style.display = 'none'
-    })
-})
-
-radioTodo.addEventListener('click', () => {
-    document.querySelectorAll('[is-done=false]').forEach(order => {
-        order.style.display = 'flex'
-    })
-    document.querySelectorAll('[is-done=true]').forEach(order => {
-        order.style.display = 'none'
-    })
-})
