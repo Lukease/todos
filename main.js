@@ -1,4 +1,4 @@
-import {Order} from './order'
+import { Order } from './order'
 
 const main = document.querySelector('.main')
 const makeOrder = document.querySelector('.inputText')
@@ -7,13 +7,7 @@ const radioAll = document.querySelector('.filters__box--all')
 const radioDone = document.querySelector('.filters__box--done')
 const radioTodo = document.querySelector('.filters__box--todo')
 
-let orderList = []
-let orderListStrike = []
-let orderListTodo = []
-
-makeOrderButton.addEventListener('click', makeNewOrderBox)
-
-function makeNewOrderBox() {
+const makeNewOrderBox = () =>{
     if (makeOrder.value === '') {
         return
     }
@@ -34,65 +28,36 @@ function createOrder(text) {
     const editButton = newOrder.getEditButton()
     const editInput = newOrder.getEditInput()
 
-    orderText.addEventListener('click', event => {
+    order.setAttribute('is-done', newOrder.getIsDone())
+    order.setAttribute('todo-id', newId)
+    order.setAttribute('text', text)
 
-        if (!event.target.classList.contains('strike')) {
+    orderText.addEventListener('click', () => {
 
-            event.target.classList.remove('box__div')
-            event.target.classList.add('strike')
+        if (!orderText.classList.contains('strike')) {
+
+            orderText.classList.remove('box__div')
+            orderText.classList.add('strike')
             order.setAttribute('is-done', 'true')
             newOrder.setIsDone(true)
-            orderListStrike = orderListStrike.concat(newOrder)
-            orderListTodo = orderListTodo.filter(order => order.getId() !== newId)
-
-            orderList.forEach(order => {
-                if (order.getId !== newId) {
-
-                    return order
-                }
-
-                return !order.getIsDone()
-
-            })
 
             return
         }
 
-        event.target.classList.add('box__div')
-        event.target.classList.remove('strike')
+        orderText.classList.add('box__div')
+        orderText.classList.remove('strike')
         order.setAttribute('is-done', 'false')
         newOrder.setIsDone(false)
 
-        orderListTodo = orderListTodo.concat(newOrder)
-        orderListStrike = orderListStrike.filter(order => order.getId() !== newId)
-
-        orderList.forEach(order => {
-            if (order.getId() !== newId) {
-                return order
-            }
-
-            return order.getIsDone()
-
-        })
     })
 
-    orderList = orderList.concat(newOrder)
-    orderListTodo = orderListTodo.concat(newOrder)
+    trashButton.addEventListener('click', () => {
+        trashButton.parentNode.parentNode.parentNode.remove()
 
-    trashButton.addEventListener('click', event => {
-        event.target.parentNode.parentNode.parentNode.remove()
-
-        orderList = orderList.filter(order => order.id !== newId)
-        orderListTodo = orderListTodo.filter(order => order.id !== newId)
-        orderListStrike = orderListStrike.filter(order => order.id !== newId)
     })
 
-    editButton.addEventListener('click', event => {
-        event.target.parentNode.parentNode.parentNode.remove()
-
-        orderList = orderList.filter(order => order.id !== newId)
-        orderListTodo = orderListTodo.filter(order => order.id !== newId)
-        orderListStrike = orderListStrike.filter(order => order.id !== newId)
+    editButton.addEventListener('click', () => {
+        editButton.parentNode.parentNode.parentNode.remove()
 
         main.appendChild(editInput)
 
@@ -108,13 +73,15 @@ function createOrder(text) {
     return order
 }
 
-radioAll.addEventListener('click', event => {
+makeOrderButton.addEventListener('click', makeNewOrderBox)
+
+radioAll.addEventListener('click', () => {
     document.querySelectorAll('.box').forEach(order => {
         order.style.display = 'flex'
     })
 })
 
-radioDone.addEventListener('click', event => {
+radioDone.addEventListener('click', () => {
     document.querySelectorAll('[is-done=true]').forEach(order => {
             order.style.display = 'flex'
         }
@@ -124,7 +91,7 @@ radioDone.addEventListener('click', event => {
     })
 })
 
-radioTodo.addEventListener('click', event => {
+radioTodo.addEventListener('click', () => {
     document.querySelectorAll('[is-done=false]').forEach(order => {
         order.style.display = 'flex'
     })

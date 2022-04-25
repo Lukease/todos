@@ -1,4 +1,4 @@
-import {v4 as uuidv4} from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 
 export class Order {
     #text
@@ -19,9 +19,6 @@ export class Order {
         const order = document.createElement('div')
 
         order.classList.add('box')
-        order.setAttribute('todo-id', this.#id)
-        order.setAttribute('is-done', 'false')
-        order.setAttribute('text', this.#text)
 
         const orderBox = document.createElement('div')
 
@@ -58,19 +55,20 @@ export class Order {
         this.#editInput = editInput
 
         this.#ref = order
+
         return order
     }
 
     getTrashButton() {
-        return this.#trashButton;
+        return this.#trashButton
     }
 
     getEditButton() {
-        return this.#editButton;
+        return this.#editButton
     }
 
     getEditInput() {
-        return this.#editInput;
+        return this.#editInput
     }
 
     getOrderText() {
@@ -78,14 +76,14 @@ export class Order {
     }
 
     getIsDone() {
-        return this.#isDone;
+        return this.#isDone
     }
 
     setIsDone(value) {
-        this.#isDone = value;
+        this.#isDone = value
     }
 
     getId() {
-        return this.#id;
+        return this.#id
     }
 }
