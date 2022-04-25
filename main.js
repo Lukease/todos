@@ -36,7 +36,7 @@ function createOrder(text) {
             orderText.classList.remove('box__div')
             orderText.classList.add('strike')
 
-            newOrder.setIsDone('true')
+            newOrder.setIsDone(true)
 
             return
         }
@@ -44,7 +44,7 @@ function createOrder(text) {
         orderText.classList.add('box__div')
         orderText.classList.remove('strike')
 
-        newOrder.setIsDone('false')
+        newOrder.setIsDone(false)
 
     })
 
@@ -76,8 +76,8 @@ function createOrder(text) {
     }
 
     radioTodo.addEventListener('click', () => {
-        order.style.display='none'
-        filteredOrder('false')
+        order.style.display = 'none'
+        filteredOrder(false)
     })
 
     radioAll.addEventListener('click', () => {
@@ -85,8 +85,8 @@ function createOrder(text) {
     })
 
     radioDone.addEventListener('click', () => {
-        order.style.display='none'
-        filteredOrder('true')
+        order.style.display = 'none'
+        filteredOrder(true)
     })
 
     return order

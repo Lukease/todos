@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 export class Order {
     #text
-    #isDone = 'false'
+    #isDone = false
     #id = uuidv4()
     #ref
     #orderText
@@ -59,7 +59,7 @@ export class Order {
         return order
     }
 
-    getOrder(){
+    getOrder() {
         return this.#ref
     }
 
@@ -85,9 +85,5 @@ export class Order {
 
     setIsDone(value) {
         this.#isDone = value
-    }
-
-    getId() {
-        return this.#id
     }
 }
