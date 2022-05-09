@@ -1,23 +1,18 @@
-import { Order } from './order'
+import { Order } from './order.js'
 
-const main = document.querySelector('.main')
-const makeOrder = document.querySelector('.inputText')
-const makeOrderButton = document.querySelector('.button')
-const radioAll = document.querySelector('.filters__box--all')
-const radioDone = document.querySelector('.filters__box--done')
-const radioTodo = document.querySelector('.filters__box--todo')
-let todos = []
+export let todos = []
 
 const makeNewOrderBox = () => {
-    if (makeOrder.value === '') {
+    if ($('.inputText').val() === '') {
         return
     }
 
-    const newOrder = createOrder(makeOrder.value)
+    const newOrder = createOrder($('.inputText').val())
 
-    main.appendChild(newOrder)
+    newOrder.appendTo($('.main'))
+    $('.inputText').val('')
 
-    makeOrder.value = ''
+    return newOrder
 }
 
 function createOrder(text) {
@@ -27,43 +22,39 @@ function createOrder(text) {
     const trashButton = newOrder.getTrashButton()
     const editButton = newOrder.getEditButton()
     const editInput = newOrder.getEditInput()
+
     todos = todos.concat(newOrder)
 
-    orderText.addEventListener('click', () => {
+    editButton.click(() => {
+        $(event.target).parents('.box').remove()
+        $('<input>').addClass('box__input').appendTo($('.main'))
 
-        if (!orderText.classList.contains('strike')) {
+        $('.box__input').on('change', event => {
 
-            orderText.classList.remove('box__div')
-            orderText.classList.add('strike')
+            const newOrder = createOrder($('.box__input').val())
 
+            newOrder.appendTo($('.main'))
+
+            $(event.target).remove()
+        })
+    })
+
+    orderText.on('click', () => {
+
+        if (!$(event.target).hasClass('strike')) {
+            $(event.target).addClass('strike')
             newOrder.setIsDone(true)
 
             return
         }
-
-        orderText.classList.add('box__div')
-        orderText.classList.remove('strike')
-
-        newOrder.setIsDone(false)
-
+        if ($(event.target).hasClass('strike')) {
+            $(event.target).removeClass('strike')
+            newOrder.setIsDone(false)
+        }
     })
 
-    trashButton.addEventListener('click', () => {
-        order.remove()
-    })
-
-    editButton.addEventListener('click', () => {
-        order.remove()
-
-        main.appendChild(editInput)
-
-        editInput.addEventListener('change', event => {
-            const editText = editInput.value
-            const newOrder = createOrder(editText)
-
-            main.appendChild(newOrder)
-            event.target.remove()
-        })
+    trashButton.click(() => {
+        $(event.target).parents('.box').remove()
     })
 
     const filteredOrder = (done) => {
@@ -71,25 +62,25 @@ function createOrder(text) {
             .filter(todo => todo.getIsDone() === done)
             .map(todo => todo.getOrder())
             .forEach(todo => {
-                todo.style.display = 'flex'
+                $(todo).css('display', 'flex')
             })
     }
 
-    radioTodo.addEventListener('click', () => {
-        order.style.display = 'none'
+    $('.filters__box--todo').click(() => {
+        $('.box').css('display', 'none')
         filteredOrder(false)
     })
 
-    radioAll.addEventListener('click', () => {
-        order.style.display = 'flex'
+    $('.filters__box--all').click(() => {
+        $('.box').css('display', 'flex')
     })
 
-    radioDone.addEventListener('click', () => {
-        order.style.display = 'none'
+    $('.filters__box--done').click(() => {
+        $('.box').css('display', 'none')
         filteredOrder(true)
     })
 
     return order
 }
 
-makeOrderButton.addEventListener('click', makeNewOrderBox)
+$('.button').on('click', makeNewOrderBox)
