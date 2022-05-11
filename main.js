@@ -2,12 +2,14 @@ import { Order } from './order.js'
 
 export let todos = []
 
-const makeNewOrderBox = () => {
-    if ($('.inputText').val() === '') {
+export const makeNewOrderBox = () => {
+    const text = $('.inputText').val()
+
+    if (text === '') {
         return
     }
 
-    const newOrder = createOrder($('.inputText').val())
+    const newOrder = createOrder(text)
 
     newOrder.appendTo($('.main'))
     $('.inputText').val('')
@@ -25,7 +27,7 @@ function createOrder(text) {
 
     todos = todos.concat(newOrder)
 
-    editButton.click(() => {
+    editButton.click( event => {
         $(event.target).parents('.box').remove()
         $('<input>').addClass('box__input').appendTo($('.main'))
 
@@ -39,7 +41,7 @@ function createOrder(text) {
         })
     })
 
-    orderText.on('click', () => {
+    orderText.on('click', event => {
 
         if (!$(event.target).hasClass('strike')) {
             $(event.target).addClass('strike')
@@ -47,13 +49,14 @@ function createOrder(text) {
 
             return
         }
+
         if ($(event.target).hasClass('strike')) {
             $(event.target).removeClass('strike')
             newOrder.setIsDone(false)
         }
     })
 
-    trashButton.click(() => {
+    trashButton.click( event => {
         $(event.target).parents('.box').remove()
     })
 

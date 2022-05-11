@@ -28,10 +28,6 @@ describe('todo app', () => {
         $('body').empty()
     })
 
-    test('should create new order', () => {
-        expect(true).toBe(true)
-    })
-
     describe('create todo', () => {
 
         test('should create new order', () => {
