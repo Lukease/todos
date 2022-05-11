@@ -129,7 +129,7 @@ describe('todo app', () => {
 
                 allFilter.trigger('click')
 
-                const addFilterClicked = allFilter.prop("checked")
+                const allFilterClicked = allFilter.prop('checked')
                 const allOrderFirst = $('.box:eq(0)').attr('style')
                 const allOrderSecond = $('.box:eq(1)').attr('style')
                 const allOrderThird = $('.box:eq(1)').attr('style')
@@ -142,7 +142,7 @@ describe('todo app', () => {
                 expect(todoFilterClicked).toBeTruthy()
                 expect(displayNoneTodoFirstOrder).toBe('display: none;')
                 expect(displayNoneTodoSecondOrder).toBe('display: none;')
-                expect(addFilterClicked).toBeTruthy()
+                expect(allFilterClicked).toBeTruthy()
                 expect(allOrderFirst).toBe('display: flex;')
                 expect(allOrderSecond).toBe('display: flex;')
                 expect(allOrderThird).toBe('display: flex;')
