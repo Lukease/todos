@@ -19,7 +19,6 @@ const body = `<div class="main">
 </div>`
 
 describe('todo app', () => {
-
     beforeEach(() => {
         $('body').append(body)
     })
@@ -29,7 +28,6 @@ describe('todo app', () => {
     })
 
     describe('create todo', () => {
-
         test('should create new order', () => {
             const orderText = 'milk'
 
@@ -42,7 +40,7 @@ describe('todo app', () => {
             expect(todos.length).toBe(1)
         })
 
-        test('shouldnt create new order', () => {
+        test('should not create new order', () => {
             $('.inputText').val('')
             makeNewOrderBox()
 
@@ -56,11 +54,9 @@ describe('todo app', () => {
             expect($('span').children().hasClass('trash')).toBeTruthy()
             expect($('span').children().hasClass('edit')).toBeTruthy()
         })
-
     })
 
     describe('todo utils', () => {
-
         test('should delete order', () => {
             $('.inputText').val('milk')
             makeNewOrderBox()
@@ -102,7 +98,6 @@ describe('todo app', () => {
         })
 
         describe('filters tests', () => {
-
             test('should filter orders', () => {
                 $('.inputText').val('milk')
                 makeNewOrderBox()
@@ -123,12 +118,12 @@ describe('todo app', () => {
 
                 doneFilter.trigger('click')
 
-                const doneFilterClicked = $('.filters__box--done').prop("checked")
+                const doneFilterClicked = $('.filters__box--done').prop('checked')
                 const displayNoneDoneOrder = $('.box:eq(2)').attr('style')
 
                 undoneFilter.trigger('click')
 
-                const todoFilterClicked = $('.filters__box--todo').prop("checked")
+                const todoFilterClicked = $('.filters__box--todo').prop('checked')
                 const displayNoneTodoFirstOrder = $('.box:eq(0)').attr('style')
                 const displayNoneTodoSecondOrder = $('.box:eq(1)').attr('style')
 
